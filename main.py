@@ -19,7 +19,7 @@ def serialize(results):
 
 async def extract(request):
     form = await request.post()
-    results = app['combinator'].extract(form['text'])
+    results = request.app['combinator'].extract(form['text'])
     return web.json_response(list(serialize(results)), dumps=json_dumps)
 
 def loader_verification(request):
