@@ -1,2 +1,1 @@
-web:
-  -  python -m aiohttp.web -H localhost -P $PORT main:init
+web: python -m aiohttp.web -H localhost -P $PORT main:init
