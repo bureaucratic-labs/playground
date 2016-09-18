@@ -1,11 +1,13 @@
+import logging
+
 from ujson import dumps
 from aiohttp import web
 from functools import partial
 
-
 from natasha import Combinator, DEFAULT_GRAMMARS
 
 
+logging.basicConfig(level=logging.INFO)
 json_dumps = partial(dumps, ensure_ascii=False)
 
 
