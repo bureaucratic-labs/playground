@@ -19,7 +19,8 @@ def serialize(results):
 
 async def extract(request):
     form = await request.post()
-    results = request.app['combinator'].extract(form['text'])
+    combinator = request.app['combinator']
+    results = combinator.resolve_matches(combinator.extract(form['text']))
     return web.json_response(list(serialize(results)), dumps=json_dumps)
 
 def init(argv):
