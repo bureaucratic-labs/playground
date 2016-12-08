@@ -10,10 +10,10 @@ json_dumps = partial(dumps, ensure_ascii=False)
 
 
 def serialize(results):
-    for (grammar, rule, match) in results:
+    for (grammar, match) in results:
         yield {
-            'grammar': grammar.__name__,
-            'rule': rule,
+            'grammar': grammar.__class__.__name__,
+            'rule': grammar.name,
             'match': match,
         }
 
