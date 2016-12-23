@@ -2,4 +2,4 @@ pymorphy2[fast]
 ujson
 aiohttp
 aiohttp_cors
-natasha==0.3.2
+natasha==0.4.0
