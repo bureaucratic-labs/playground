@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+pip install -e git+https://github.com/bureaucratic-labs/yargy.git#egg=yargy
+pip install -e git+https://github.com/bureaucratic-labs/natasha.git#egg=natasha
