@@ -4,6 +4,9 @@ from functools import partial
 from aiohttp import web
 import aiohttp_cors
 
+import yargy
+import natasha
+
 from natasha import Combinator, DEFAULT_GRAMMARS
 
 json_dumps = partial(dumps, ensure_ascii=False)
@@ -14,14 +17,32 @@ def serialize(results):
         yield {
             'grammar': grammar.__class__.__name__,
             'rule': grammar.name,
-            'tokens': tokens,
+            'tokens': [
+                {
+                    'value': t.value,
+                    'position': t.position,
+                    'forms': [
+                        {
+                            'normal_form': f['normal_form'],
+                            'grammemes': f['grammemes'],
+                        } for f in t.forms
+                    ],
+                } for t in tokens
+            ],
         }
 
 async def extract(request):
     form = await request.post()
     combinator = request.app['combinator']
-    results = combinator.resolve_matches(combinator.extract(form['text']))
-    return web.json_response(list(serialize(results)), dumps=json_dumps)
+    matches = combinator.extract(form['text'])
+    results = serialize(combinator.resolve_matches(matches))
+    return web.json_response(results, dumps=json_dumps)
+
+def version(request):
+    return web.json_response({
+        'natasha': natasha.__version__,
+        'yargy': yargy.__version__,
+    })
 
 def init(argv):
     app = web.Application()
@@ -34,4 +55,5 @@ def init(argv):
             )
     })
     cors.add(app.router.add_route('POST', '/api/extract', extract))
+    cors.add(app.router.add_route('GET', '/api/version', version))
     return app
