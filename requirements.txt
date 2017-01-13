@@ -2,5 +2,4 @@ pymorphy2[fast]
 ujson
 aiohttp
 aiohttp_cors
--e git+https://github.com/bureaucratic-labs/yargy.git#egg=yargy
 -e git+https://github.com/bureaucratic-labs/natasha.git#egg=natasha
