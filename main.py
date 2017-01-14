@@ -7,6 +7,7 @@ import aiohttp_cors
 import yargy
 import natasha
 
+from yargy.normalization import get_normalized_text
 from natasha import Combinator, DEFAULT_GRAMMARS
 
 json_dumps = partial(dumps, ensure_ascii=False)
@@ -29,6 +30,7 @@ def serialize(results):
                     ],
                 } for t in tokens
             ],
+            'normal_form': get_normalized_text(tokens),
         }
 
 async def extract(request):
