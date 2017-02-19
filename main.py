@@ -9,8 +9,14 @@ import natasha
 
 from yargy.normalization import get_normalized_text
 from natasha import Combinator, DEFAULT_GRAMMARS
+from natasha.grammars.person import ProbabilisticPerson
 
 json_dumps = partial(dumps, ensure_ascii=False)
+
+
+GRAMMARS = DEFAULT_GRAMMARS + [
+    ProbabilisticPerson,
+]
 
 
 def serialize(results):
@@ -35,7 +41,7 @@ def serialize(results):
 
 async def extract(request):
     form = await request.post()
-    combinator = request.app['combinator']
+    combinator = Combinator(GRAMMARS)
     matches = combinator.extract(form['text'])
     results = serialize(combinator.resolve_matches(matches))
     return web.json_response(results, dumps=json_dumps)
@@ -48,7 +54,6 @@ def version(request):
 
 def init(argv):
     app = web.Application()
-    app['combinator'] = Combinator(DEFAULT_GRAMMARS)
     cors = aiohttp_cors.setup(app, defaults={
         "*": aiohttp_cors.ResourceOptions(
                 allow_credentials=True,
