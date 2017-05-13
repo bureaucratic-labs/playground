@@ -4,15 +4,31 @@ from natasha import __version__ as natasha_version
 
 from aiohttp import web
 
-from playground.utils import json_dumps, serialize_entities
+from playground.utils import (
+    json_dumps,
+    extract_objects,
+    serialize_spans,
+    serialize_objects,
+)
 from playground.settings import Combinator
 
 
 async def extract(request):
     form = await request.post()
-    matches = Combinator.extract(form['text'])
-    results = serialize_entities(Combinator.resolve_matches(matches))
-    return web.json_response(results, dumps=json_dumps)
+    matches = list(
+        Combinator.resolve_matches(
+            Combinator.extract(form['text'])
+        )
+    )
+
+    objects = extract_objects(matches)
+
+    response = {
+        'spans': serialize_spans(matches),
+        'objects': serialize_objects(objects),
+    }
+
+    return web.json_response(response, dumps=json_dumps)
 
 
 def version(request):
