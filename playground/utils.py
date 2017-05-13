@@ -99,12 +99,20 @@ def extract_objects(matches):
             yield (type, result)
 
 
+def solve_coreference(objects):
+    results = []
+    for o in objects:
+        if not any(o == x for x in results):
+            results.append(o)
+    return results
+
+
 def serialize_objects(objects):
+    objects = solve_coreference(objects)
     results = []
     for t, o in objects:
-        if t not in results:
-            results.append({
-                'type': t,
-                'fields': OBJECT_SERIALIZERS[t](o),
-            })
+        results.append({
+            'type': t,
+            'fields': OBJECT_SERIALIZERS[t](o),
+        })
     return results
