@@ -1,6 +1,7 @@
 from ujson import dumps
 from functools import partial
 
+from yargy.utils import get_tokens_position
 from yargy.normalization import get_normalized_text
 from yargy.interpretation import InterpretationEngine
 
@@ -51,7 +52,7 @@ def serialize_object_attributes(obj, attributes):
 
     yield 'spans', [
         {
-            'position': (t[0].position[0], t[-1].position[1]),
+            'position': get_tokens_position(t),
             'normalized': get_normalized_text(t),
         } for t in obj.spans
     ]
