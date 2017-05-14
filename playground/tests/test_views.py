@@ -83,3 +83,17 @@ async def test_extract_endpoint(cli, war_and_peace_text):
         ],
         'type': 'person',
     }
+
+    spans = response['spans']
+
+    assert len(spans) == 6
+
+    assert spans[0]['grammar'] == 'Person'
+    assert spans[0]['rule'] == 'FullReversed'
+    assert spans[0]['normal_form'] == 'Анна Павловна Шерер'
+    assert spans[0]['tokens']
+
+    for token in spans[0]['tokens']:
+        assert token['forms']
+        assert token['position']
+        assert token['value']
