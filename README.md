@@ -1,4 +1,4 @@
-# Playground
+# Playground [![Build Status](https://travis-ci.org/bureaucratic-labs/playground.svg?branch=master)](https://travis-ci.org/bureaucratic-labs/playground)
 
 ```bash
 $ http --form https://natasha.b-labs.pro/api/extract  \
@@ -15,38 +15,54 @@ Server: Python/3.6 aiohttp/2.0.7
         {
             "fields": {
                 "firstname": "Иисус",
-                "lastname": "Христа",
-                "spans": [
-                    [
+                "lastname": "Христа"
+            },
+            "spans": [
+                {
+                    "normalized": "Иисус Христа",
+                    "position": [
                         106,
                         119
                     ]
-                ]
-            },
+                },
+                {
+                    "normalized": "Иисус",
+                    "position": [
+                        68,
+                        74
+                    ]
+                }
+            ],
             "type": "person"
         },
         {
             "fields": {
-                "firstname": "Мухаммед",
-                "spans": [
-                    [
+                "firstname": "Мухаммед"
+            },
+            "spans": [
+                {
+                    "normalized": "Мухаммед",
+                    "position": [
                         85,
                         94
                     ]
-                ]
-            },
+                }
+            ],
             "type": "person"
         },
         {
             "fields": {
-                "name": "РФ",
-                "spans": [
-                    [
+                "name": "РФ"
+            },
+            "spans": [
+                {
+                    "normalized": "РФ",
+                    "position": [
                         295,
                         297
                     ]
-                ]
-            },
+                }
+            ],
             "type": "location"
         }
     ],
@@ -60,22 +76,22 @@ Server: Python/3.6 aiohttp/2.0.7
                     "forms": [
                         {
                             "grammemes": [
-                                "anim",
+                                "NOUN",
                                 "sing",
                                 "masc",
-                                "NOUN",
-                                "Name",
-                                "gent"
+                                "gent",
+                                "anim",
+                                "Name"
                             ],
                             "normal_form": "иисус"
                         },
                         {
                             "grammemes": [
-                                "anim",
-                                "accs",
-                                "sing",
-                                "masc",
                                 "NOUN",
+                                "sing",
+                                "accs",
+                                "masc",
+                                "anim",
                                 "Name"
                             ],
                             "normal_form": "иисус"
@@ -91,23 +107,23 @@ Server: Python/3.6 aiohttp/2.0.7
                     "forms": [
                         {
                             "grammemes": [
-                                "anim",
+                                "NOUN",
                                 "sing",
                                 "masc",
-                                "NOUN",
+                                "Sgtm",
                                 "gent",
-                                "Sgtm"
+                                "anim"
                             ],
                             "normal_form": "христос"
                         },
                         {
                             "grammemes": [
-                                "anim",
-                                "accs",
-                                "sing",
-                                "masc",
                                 "NOUN",
-                                "Sgtm"
+                                "sing",
+                                "accs",
+                                "masc",
+                                "Sgtm",
+                                "anim"
                             ],
                             "normal_form": "христос"
                         }
@@ -129,22 +145,22 @@ Server: Python/3.6 aiohttp/2.0.7
                     "forms": [
                         {
                             "grammemes": [
-                                "anim",
+                                "NOUN",
                                 "sing",
                                 "masc",
-                                "NOUN",
-                                "Name",
-                                "gent"
+                                "gent",
+                                "anim",
+                                "Name"
                             ],
                             "normal_form": "иисус"
                         },
                         {
                             "grammemes": [
-                                "anim",
-                                "accs",
-                                "sing",
-                                "masc",
                                 "NOUN",
+                                "sing",
+                                "accs",
+                                "masc",
+                                "anim",
                                 "Name"
                             ],
                             "normal_form": "иисус"
@@ -167,22 +183,22 @@ Server: Python/3.6 aiohttp/2.0.7
                     "forms": [
                         {
                             "grammemes": [
-                                "anim",
+                                "NOUN",
                                 "sing",
                                 "masc",
-                                "NOUN",
-                                "Name",
-                                "gent"
+                                "gent",
+                                "anim",
+                                "Name"
                             ],
                             "normal_form": "мухаммед"
                         },
                         {
                             "grammemes": [
-                                "anim",
-                                "accs",
-                                "sing",
-                                "masc",
                                 "NOUN",
+                                "sing",
+                                "accs",
+                                "masc",
+                                "anim",
                                 "Name"
                             ],
                             "normal_form": "мухаммед"
@@ -205,85 +221,85 @@ Server: Python/3.6 aiohttp/2.0.7
                     "forms": [
                         {
                             "grammemes": [
-                                "sing",
                                 "NOUN",
                                 "femn",
+                                "sing",
+                                "Sgtm",
+                                "Geox",
                                 "gent",
-                                "Fixd",
                                 "Abbr",
-                                "Geox",
-                                "inan",
-                                "Sgtm"
+                                "Fixd",
+                                "inan"
                             ],
                             "normal_form": "рф"
                         },
                         {
                             "grammemes": [
-                                "sing",
                                 "NOUN",
                                 "femn",
-                                "Fixd",
-                                "Abbr",
+                                "sing",
                                 "loct",
+                                "Sgtm",
                                 "Geox",
-                                "inan",
-                                "Sgtm"
+                                "Abbr",
+                                "Fixd",
+                                "inan"
                             ],
                             "normal_form": "рф"
                         },
                         {
                             "grammemes": [
-                                "sing",
                                 "NOUN",
                                 "femn",
-                                "Fixd",
+                                "sing",
+                                "Sgtm",
+                                "Geox",
                                 "Abbr",
+                                "Fixd",
                                 "nomn",
-                                "Geox",
-                                "inan",
-                                "Sgtm"
+                                "inan"
                             ],
                             "normal_form": "рф"
                         },
                         {
                             "grammemes": [
+                                "NOUN",
+                                "femn",
                                 "sing",
+                                "Sgtm",
+                                "Geox",
+                                "Abbr",
+                                "Fixd",
                                 "ablt",
-                                "NOUN",
-                                "femn",
-                                "Fixd",
-                                "Abbr",
-                                "Geox",
-                                "inan",
-                                "Sgtm"
+                                "inan"
                             ],
                             "normal_form": "рф"
                         },
                         {
                             "grammemes": [
+                                "NOUN",
+                                "femn",
                                 "sing",
+                                "Sgtm",
+                                "Geox",
+                                "Abbr",
+                                "Fixd",
                                 "datv",
-                                "NOUN",
-                                "femn",
-                                "Fixd",
-                                "Abbr",
-                                "Geox",
-                                "inan",
-                                "Sgtm"
+                                "inan"
                             ],
                             "normal_form": "рф"
                         },
                         {
                             "grammemes": [
-                                "sing",
                                 "NOUN",
                                 "femn",
-                                "Fixd",
+                                "sing",
                                 "accs",
-                                "Abbr",
+                                "Sgtm",
                                 "Geox",
-                                "inan",
-                                "Sgtm"
+                                "Abbr",
+                                "Fixd",
+                                "inan"
                             ],
                             "normal_form": "рф"
                         }
