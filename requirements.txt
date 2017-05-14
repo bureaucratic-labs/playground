@@ -1,5 +1,6 @@
 pymorphy2[fast]
 ujson
-aiohttp
-aiohttp_cors
-
+aiohttp==2.0.7
+aiohttp-cors==0.5.3
+pytest==3.0.7
+pytest-aiohttp==0.1.3

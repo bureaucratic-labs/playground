@@ -50,7 +50,10 @@ def serialize_object_attributes(obj, attributes):
         yield attribute, get_normalized_text(tokens) if tokens else None
 
     yield 'spans', [
-        (t[0].position[0], t[-1].position[1]) for t in obj.spans
+        {
+            'position': (t[0].position[0], t[-1].position[1]),
+            'normalized': get_normalized_text(t),
+        } for t in obj.spans
     ]
 
 
@@ -101,9 +104,17 @@ def extract_objects(matches):
 
 def solve_coreference(objects):
     results = []
-    for o in objects:
-        if not any(o == x for x in results):
-            results.append(o)
+    for a in objects:
+        if not any(a == b for b in results):
+            results.append(a)
+        else:
+            for i, b in enumerate(results):
+                if a == b:
+                    item = b[1].merge(a[1])
+                    results[i] = (
+                        b[0],
+                        item,
+                    )
     return results
 
 
@@ -111,8 +122,12 @@ def serialize_objects(objects):
     objects = solve_coreference(objects)
     results = []
     for t, o in objects:
-        results.append({
+        fields = OBJECT_SERIALIZERS[t](o)
+        spans = fields.pop('spans')
+        item = {
             'type': t,
-            'fields': OBJECT_SERIALIZERS[t](o),
-        })
+            'fields': fields,
+            'spans': spans,
+        }
+        results.append(item)
     return results
