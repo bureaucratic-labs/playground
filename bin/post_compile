@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 pip install -e git+https://github.com/bureaucratic-labs/yargy.git@7554e25badccc58c5da016a0921ea8c20e89fe55#egg=yargy
-pip install -e git+https://github.com/bureaucratic-labs/natasha.git@eb47e3c10ef13daa01e89cc869ce0c3519d19bc3#egg=natasha
+pip install -e git+https://github.com/bureaucratic-labs/natasha.git@ac49f5aa4a3dba8e0c2555f872c5286d80a90caa#egg=natasha
