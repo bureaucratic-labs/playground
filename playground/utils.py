@@ -7,7 +7,7 @@ from yargy.interpretation import InterpretationEngine
 
 from natasha.grammars.person import PersonObject
 from natasha.grammars.organisation import OrganisationObject
-from natasha.grammars.location import LocationObject
+from natasha.grammars.location import LocationObject, AddressObject
 
 
 json_dumps = partial(dumps, ensure_ascii=False)
@@ -38,6 +38,7 @@ OBJECTS_MAPPING = {
     'person': PersonObject,
     'organisation': OrganisationObject,
     'location': LocationObject,
+    'address': AddressObject,
 }
 
 
@@ -89,10 +90,23 @@ def serialize_location_object(obj):
     return {k: v for k, v in attributes}
 
 
+def serialize_address_object(obj):
+    attributes = serialize_object_attributes(obj, {
+        'street_descriptor',
+        'street_name',
+        'house_number',
+        'house_letter',
+        'house_corpus',
+        'house_building',
+    })
+    return {k: v for k, v in attributes}
+
+
 OBJECT_SERIALIZERS = {
     'person': serialize_person_object,
     'organisation': serialize_organisation_object,
     'location': serialize_location_object,
+    'address': serialize_address_object,
 }
 
 

@@ -20,6 +20,13 @@ def war_and_peace_text():
     '''
 
 
+@pytest.fixture
+def location_and_address_text():
+    return '''
+    Концерт пройдет в Санкт-Петербурге, на набережной реки фонтанки, дом 5
+    '''
+
+
 async def test_version_endpoint(cli):
     response = await cli.get('/api/version')
     assert response.status == 200
@@ -29,7 +36,7 @@ async def test_version_endpoint(cli):
     }
 
 
-async def test_extract_endpoint(cli, war_and_peace_text):
+async def test_extract_person_endpoint(cli, war_and_peace_text):
     response = await cli.post('/api/extract', data={
         'text': war_and_peace_text,
     })
@@ -97,3 +104,46 @@ async def test_extract_endpoint(cli, war_and_peace_text):
         assert token['forms']
         assert token['position']
         assert token['value']
+
+
+async def test_extract_location_and_address_endpoint(
+    cli,
+    location_and_address_text
+):
+    response = await cli.post('/api/extract', data={
+        'text': location_and_address_text,
+    })
+    assert response.status == 200
+    response = await response.json()
+
+    objects = response['objects']
+
+    assert len(objects) == 2
+
+    assert objects[0] == {
+        'fields': {
+            'name': 'Санкт-Петербург',
+        },
+        'spans': [
+            {
+                'normalized': 'Санкт-Петербург',
+                'position': [23, 39]
+            }
+        ],
+        'type': 'location',
+    }
+
+    assert objects[1] == {
+        'fields': {
+            'house_number': '5',
+            'street_descriptor': 'набережная',
+            'street_name': 'реки фонтанки',
+        },
+        'spans': [
+            {
+                'normalized': 'набережная реки фонтанки , дом 5',
+                'position': [44, 75],
+            }
+        ],
+        'type': 'address',
+    }
