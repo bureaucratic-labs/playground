@@ -20,19 +20,12 @@ def war_and_peace_text():
     '''
 
 
-@pytest.fixture
-def location_and_address_text():
-    return '''
-    Концерт пройдет в Санкт-Петербурге, на набережной реки фонтанки, дом 5
-    '''
-
-
 async def test_version_endpoint(cli):
     response = await cli.get('/api/version')
     assert response.status == 200
     assert await response.json() == {
-        'natasha': '0.7.0',
-        'yargy': '0.8.0',
+        'natasha': '0.8.0',
+        'yargy': '0.9.0',
     }
 
 
@@ -41,109 +34,46 @@ async def test_extract_person_endpoint(cli, war_and_peace_text):
         'text': war_and_peace_text,
     })
     assert response.status == 200
-    response = await response.json()
+    matches = await response.json()
 
-    objects = response['objects']
-
-    assert len(objects) == 3
-    assert objects[0] == {
-        'fields': {
-            'firstname': 'Анна',
-            'middlename': 'Павловна',
-            'lastname': 'Шерер',
+    assert len(matches) == 4
+    assert matches[0] == {
+        'fact': {
+            'first': 'анна',
+            'last': 'шерер',
+            'middle': 'павловна',
+            'nick': None
         },
-        'spans': [
-            {
-                'normalized': 'Анна Павловна Шерер',
-                'position': [45, 64],
-            },
-            {
-                'normalized': 'Анна Павловна',
-                'position': [205, 218],
-            }
-        ],
-        'type': 'person',
+        'span': [45, 64],
+        'type': 'Name'
     }
-    assert objects[1] == {
-        'fields': {
-            'firstname': 'Мария',
-            'middlename': 'Феодоровна',
+    assert matches[1] == {
+        'fact': {
+            'first': 'мария',
+            'last': None,
+            'middle': 'феодоровна',
+            'nick': None
         },
-        'spans': [
-            {
-                'normalized': 'Мария Феодоровна',
-                'position': [106, 122],
-            },
-        ],
-        'type': 'person',
+        'span': [106, 122],
+        'type': 'Name'
     }
-
-    assert objects[2] == {
-        'fields': {
-            'firstname': 'Василий',
+    assert matches[2] == {
+        'fact': {
+            'first': 'василий',
+            'last': None,
+            'middle': None,
+            'nick': None
         },
-        'spans': [
-            {
-                'normalized': 'Василий',
-                'position': [163, 170],
-            },
-        ],
-        'type': 'person',
+        'span': [163, 170],
+        'type': 'Name'
     }
-
-    spans = response['spans']
-
-    assert len(spans) == 6
-
-    assert spans[0]['grammar'] == 'Person'
-    assert spans[0]['rule'] == 'FullReversed'
-    assert spans[0]['normal_form'] == 'Анна Павловна Шерер'
-    assert spans[0]['tokens']
-
-    for token in spans[0]['tokens']:
-        assert token['forms']
-        assert token['position']
-        assert token['value']
-
-
-async def test_extract_location_and_address_endpoint(
-    cli,
-    location_and_address_text
-):
-    response = await cli.post('/api/extract', data={
-        'text': location_and_address_text,
-    })
-    assert response.status == 200
-    response = await response.json()
-
-    objects = response['objects']
-
-    assert len(objects) == 2
-
-    assert objects[0] == {
-        'fields': {
-            'name': 'Санкт-Петербург',
+    assert matches[3] == {
+        'fact': {
+            'first': 'анна',
+            'last': None,
+            'middle': 'павловна',
+            'nick': None
         },
-        'spans': [
-            {
-                'normalized': 'Санкт-Петербург',
-                'position': [23, 39]
-            }
-        ],
-        'type': 'location',
-    }
-
-    assert objects[1] == {
-        'fields': {
-            'house_number': '5',
-            'street_descriptor': 'набережная',
-            'street_name': 'реки фонтанки',
-        },
-        'spans': [
-            {
-                'normalized': 'набережная реки фонтанки , дом 5',
-                'position': [44, 75],
-            }
-        ],
-        'type': 'address',
+        'span': [205, 218],
+        'type': 'Name'
     }
