@@ -1,3 +1,4 @@
+
 from aiohttp import web
 from aiohttp_cors import ResourceOptions, setup as setup_cors
 
@@ -5,7 +6,6 @@ from playground import views
 
 
 def make_app():
-
     app = web.Application()
     cors = setup_cors(app, defaults={
         '*': ResourceOptions(
@@ -14,10 +14,6 @@ def make_app():
             allow_headers='*',
         )
     })
-
-    '''
-    Setup routes
-    '''
 
     cors.add(
         app.router.add_route('POST', '/api/extract', views.extract)
