@@ -77,3 +77,18 @@ async def test_extract_person_endpoint(cli, war_and_peace_text):
         'span': [205, 218],
         'type': 'Name'
     }
+
+
+async def test_send_and_get_issues(cli, war_and_peace_text):
+    response = await cli.post('/api/issues', data={
+        'text': war_and_peace_text,
+        'description': 'some error description',
+    })
+    assert response.status == 200
+    assert (await response.json()) == {
+        'status': True
+    }
+
+    response = await cli.get('/api/issues')
+    assert response.status == 200
+    assert (await response.json())[0]['text'] == war_and_peace_text
