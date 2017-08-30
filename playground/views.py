@@ -3,6 +3,8 @@ from datetime import datetime
 
 from yargy import __version__ as yargy_version
 from natasha import __version__ as natasha_version
+from pymorphy2 import __version__ as pymorphy_version
+from pymorphy2_dicts_ru import __version__ as pymorphy_dicts_version
 
 from aiohttp import web
 
@@ -23,6 +25,8 @@ def version(request):
     return web.json_response({
         'yargy': yargy_version,
         'natasha': natasha_version,
+        'pymorphy': pymorphy_version,
+        'pymorphy_dicts': pymorphy_dicts_version,
     })
 
 
