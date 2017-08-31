@@ -23,10 +23,7 @@ def war_and_peace_text():
 async def test_version_endpoint(cli):
     response = await cli.get('/api/version')
     assert response.status == 200
-    assert await response.json() == {
-        'natasha': '0.8.0',
-        'yargy': '0.9.0',
-    }
+    assert (await response.json()).keys() == {'natasha', 'yargy', 'pymorphy': '0.8', 'pymorphy_dicts'}
 
 
 async def test_extract_person_endpoint(cli, war_and_peace_text):
