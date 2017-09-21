@@ -2,10 +2,17 @@
 from os import environ
 from urllib.parse import urlparse
 
-from natasha import NamesExtractor
+from natasha import (
+    NamesExtractor,
+    LocationExtractor,
+    AddressExtractor,
+)
 
-
-EXTRACTOR = NamesExtractor()
+EXTRACTORS = [
+    NamesExtractor(),
+    LocationExtractor(),
+    AddressExtractor(),
+]
 
 BIND_HOST = environ.get('HOST', '0.0.0.0')
 BIND_PORT = int(environ.get('PORT', 4000))

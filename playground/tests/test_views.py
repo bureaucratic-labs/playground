@@ -20,6 +20,13 @@ def war_and_peace_text():
     '''
 
 
+@pytest.fixture
+def text_with_locations_and_addresses():
+    return '''
+    В городе-герое Ленинграде, на Малой Конюшенной улице, дом 3
+    '''
+
+
 async def test_version_endpoint(cli):
     response = await cli.get('/api/version')
     assert response.status == 200
@@ -73,6 +80,33 @@ async def test_extract_person_endpoint(cli, war_and_peace_text):
         },
         'span': [205, 218],
         'type': 'Name'
+    }
+
+
+async def test_extract_location_and_address_endpoint(cli, text_with_locations_and_addresses):
+    response = await cli.post('/api/extract', data={
+        'text': text_with_locations_and_addresses,
+    })
+    assert response.status == 200
+    matches = await response.json()
+
+    assert len(matches) == 2
+    assert matches[0] == {
+        'fact': {
+            'name': 'город-герой ленинград'
+        },
+        'span': [7, 30],
+        'type': 'Location',
+    }
+    assert matches[1] == {
+        'fact': {
+            'parts': [
+                {'name': 'Малой Конюшенной', 'type': 'улица'},
+                {'number': 3, 'type': 'дом'}
+            ]
+        },
+        'span': [35, 64],
+        'type': 'Address',
     }
 
 

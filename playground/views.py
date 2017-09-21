@@ -14,9 +14,11 @@ from playground.utils import json_dumps
 
 async def extract(request):
     form = await request.post()
-    matches = EXTRACTOR(form['text'])
+    matches = []
+    for extractor in EXTRACTORS:
+        matches.extend(extractor(form['text']).as_json)
     return web.json_response(
-        matches.as_json,
+        matches,
         dumps=json_dumps
     )
 
