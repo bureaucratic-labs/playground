@@ -15,13 +15,14 @@ from playground.settings import (
 from playground.utils import jsonify
 
 
-class Issue(namedtuple('Issue', 'id, timestamp, text')):
+class Issue(namedtuple('Issue', 'id, timestamp, text, description')):
     @classmethod
-    def from_text(cls, text):
+    def from_text(cls, text, description):
         return cls(
             id=sha256(text.encode('utf8')).hexdigest(),
             timestamp=datetime.now(),
-            text=text
+            text=text,
+            description=description
         )
 
     @property
@@ -29,7 +30,8 @@ class Issue(namedtuple('Issue', 'id, timestamp, text')):
         return {
             '_id': self.id,
             'timestamp': self.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
-            'text': self.text
+            'text': self.text,
+            'description': self.description
         }
 
     @classmethod
@@ -40,12 +42,14 @@ class Issue(namedtuple('Issue', 'id, timestamp, text')):
                 data[b'timestamp'].decode('utf8'),
                 '%Y-%m-%d %H:%M:%S'
             ),
-            text=data[b'text'].decode('utf8')
+            text=data[b'text'].decode('utf8'),
+            description=data[b'description'].decode('utf8')
         )
 
 
 async def extract(request):
-    text = await request.text()
+    form = await request.post()
+    text = form['text']
     matches = []
     for extractor in EXTRACTORS:
         matches.extend(extractor(text).as_json)
@@ -70,9 +74,12 @@ async def get_issues(request):
 
 
 async def send_issue(request):
-    text = await request.text()
+    form = await request.post()
+    text = form['text']
+    description = form['description']
+
     async with request.app.redis.get() as conn:
-        item = Issue.from_text(text)
+        item = Issue.from_text(text, description)
         key = '{0}:{1}'.format(REDIS_ISSUES_KEY, item.id)
         await conn.hmset_dict(key, item.as_json)
         await conn.expire(key, REDIS_ISSUES_TTL)

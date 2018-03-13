@@ -29,7 +29,10 @@ async def test_version_endpoint(cli):
 
 
 async def test_extract_person_endpoint(cli):
-    response = await cli.post('/api/extract', data=WAR_AND_PEACE_TEXT)
+    response = await cli.post(
+        '/api/extract',
+        data={'text': WAR_AND_PEACE_TEXT}
+    )
     assert response.status == 200
     matches = await response.json()
 
@@ -77,7 +80,7 @@ async def test_extract_person_endpoint(cli):
     ]
 
 async def test_extract_location_and_address_endpoint(cli):
-    response = await cli.post('/api/extract', data=ADDRESS_TEXT)
+    response = await cli.post('/api/extract', data={'text': ADDRESS_TEXT})
     assert response.status == 200
     matches = await response.json()
 
@@ -95,7 +98,13 @@ async def test_extract_location_and_address_endpoint(cli):
     ]
 
 async def test_send_and_get_issues(cli):
-    response = await cli.post('/api/issues', data=WAR_AND_PEACE_TEXT)
+    response = await cli.post(
+        '/api/issues',
+        data={
+            'text': WAR_AND_PEACE_TEXT,
+            'description': None
+        }
+    )
     assert response.status == 200
     assert (await response.json()) == {
         'status': True
