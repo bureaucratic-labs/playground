@@ -7,4 +7,4 @@ install:
   - pip install -r requirements.txt
   - bash bin/post_compile
 script:
-  - pytest -vv playground
+  - pytest -vv --pep8 playground
